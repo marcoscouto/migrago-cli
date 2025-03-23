@@ -93,7 +93,7 @@ func executeMigrations(config DatabaseConfig) error {
 
 	defer db.Close()
 
-	migrator := migrago.New(db)
+	migrator := migrago.New(db, config.Driver)
 	return migrator.ExecuteMigrations(migrationsDir)
 }
 
