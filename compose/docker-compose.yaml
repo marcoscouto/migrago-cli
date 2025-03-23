@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:17.4-alpine
+    container_name: postgres_migrago_cli
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: migrago
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  mysql:
+    image: mysql:8.4.4
+    container_name: mysql_migrago_cli
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: migrago
+    volumes:
+      - mysqldata:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  db_admin:
+    image: adminer:5.0.6
+    container_name: adminer_migrago_cli
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+      ADMINER_DEFAULT_USERNAME: root
+      ADMINER_DEFAULT_PASSWORD: pass
+    depends_on:
+      - postgres
+      - mysql
+    ports:
+      - 9000:8080
+
+volumes:
+  pgdata:
+  mysqldata:
