@@ -12,13 +12,13 @@ import (
 )
 
 func main() {
-		createAction := action.NewCreate()
-		executeAction := action.NewExecute()
+	createAction := action.NewCreate()
+	executeAction := action.NewExecute()
 
-		startCommand := command.NewStart(
-			createAction,
-			executeAction,
-		)
+	startCommand := command.NewStart(
+		createAction,
+		executeAction,
+	)
 
 	var rootCmd = &cobra.Command{
 		Use:   "migrago",
@@ -29,10 +29,13 @@ func main() {
 	var startCmd = &cobra.Command{
 		Use:   "start",
 		Short: "Start the migration tool",
-		Run: startCommand.Start,
+		Long:  `Start the migration tool and choose between create or execute migrations. You can create a new migration file or execute all pending migrations.`,
+		Run:   startCommand.Start,
 	}
 
 	rootCmd.AddCommand(startCmd)
+	rootCmd.CompletionOptions.DisableDefaultCmd = true
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
