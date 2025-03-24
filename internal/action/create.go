@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/marcoscouto/migrago-cli/internal/errors"
 )
 
 const (
@@ -24,15 +26,14 @@ func NewCreate() Create {
 	return &create{}
 }
 
-
 func (c *create) CreateMigration(name string) error {
 	if err := os.MkdirAll(migrationsDir, permissions); err != nil {
-		return fmt.Errorf("failed to create migrations directory: %v", err)
+		return errors.ErrCreateMigrationsDir
 	}
 
 	nextNum, err := getNextMigrationNumber()
 	if err != nil {
-		return fmt.Errorf("failed to get next migration number: %v", err)
+		return errors.ErrGetNextMigrationNum
 	}
 
 	sanitizedName := strings.ReplaceAll(name, " ", "_")
@@ -40,7 +41,7 @@ func (c *create) CreateMigration(name string) error {
 	filepath := filepath.Join(migrationsDir, filename)
 
 	if err := os.WriteFile(filepath, []byte(""), 0644); err != nil {
-		return fmt.Errorf("failed to create migration file: %v", err)
+		return errors.ErrCreateMigrationFile
 	}
 
 	return nil

@@ -6,6 +6,7 @@ import (
 
 	"github.com/marcoscouto/migrago"
 	"github.com/marcoscouto/migrago-cli/internal/data"
+	"github.com/marcoscouto/migrago-cli/internal/errors"
 )
 
 const (
@@ -37,7 +38,7 @@ func (e *execute) ExecuteMigrations(config data.DatabaseConfig) error {
 
 	db, err := sql.Open(config.Driver, dsn)
 	if err != nil {
-		return fmt.Errorf("failed to open database connection: %v", err)
+		return errors.ErrOpenDbConnection
 	}
 
 	defer db.Close()
